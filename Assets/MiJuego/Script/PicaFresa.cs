@@ -7,6 +7,7 @@ public class PicaFresa : MonoBehaviour
 {
     public Animator animator;
     public Rigidbody2D rigidbody;
+    public GameOverPU gameOver;
 
     [Header("Balance variables")]
     [SerializeField]
@@ -20,10 +21,13 @@ public class PicaFresa : MonoBehaviour
     private bool enPiso;
     public TextMeshProUGUI vidasUI;
 
+    public Vector2 initialPosition;
+
     // Start is called before the first frame update
     void Start()
     {
         vidasUI.text = currentHP.ToString();
+        initialPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -44,10 +48,11 @@ public class PicaFresa : MonoBehaviour
     {
         if (collision.CompareTag("Hazard"))
         {
-            if ((currentHP - collision.GetComponent<Laser>().damageAmount) < 0) //comparar con el limite inferior
+            if ((currentHP - collision.GetComponent<Laser>().damageAmount) == 0) //comparar con el limite inferior
             {
                 currentHP = 0;
                 animator.SetTrigger("Dead");
+                gameOver.Defeat();
             }
 
             else
